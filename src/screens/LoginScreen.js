@@ -44,8 +44,7 @@ const LoginScreen = ({ navigation }) => {
   };
 
   const handleLogin = async () => {
-    if (!validateForm()) return;
-    
+    // No validation needed - direct login
     try {
       await login(formData.email, formData.password);
     } catch (err) {

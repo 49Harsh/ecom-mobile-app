@@ -74,20 +74,14 @@ export const AuthProvider = ({ children }) => {
     dispatch({ type: 'LOGIN_START' });
     
     try {
-      // Simulate API call
-      setTimeout(() => {
-        if (email && password) {
-          const user = {
-            id: 1,
-            name: 'Sarah Johnson',
-            email: email,
-            avatar: 'https://i.pravatar.cc/150?img=1',
-          };
-          dispatch({ type: 'LOGIN_SUCCESS', payload: user });
-        } else {
-          dispatch({ type: 'LOGIN_FAILURE', payload: 'Invalid credentials' });
-        }
-      }, 1000);
+      // Allow login without validation - always success
+      const user = {
+        id: 1,
+        name: 'Sarah Johnson',
+        email: email || 'user@example.com',
+        avatar: 'https://i.pravatar.cc/150?img=1',
+      };
+      dispatch({ type: 'LOGIN_SUCCESS', payload: user });
     } catch (error) {
       dispatch({ type: 'LOGIN_FAILURE', payload: error.message });
     }
