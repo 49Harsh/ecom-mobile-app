@@ -82,6 +82,37 @@ You've successfully run and modified your React Native App. :partying_face:
 - If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
 - If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
 
+# Project Details
+
+### Time Taken
+- Initial setup and configuration: 2 hours
+- UI development: 4 hours
+- Integration and testing: 2 hours
+- Total time: Approximately 8 hours
+aproxx 1 and half day 
+
+### Demo Video
+You can watch a demonstration of the app's functionality here:
+[View Demo Video](https://drive.google.com/file/d/1JjvydZWYRJlwwYOCBPUALbu8Mjc6MQb8/view?usp=drive_link)
+
+### Screenshots/GIFs
+> Note: Please add actual screenshots of your app here. Below are the suggested screenshots to include:
+- Home Screen
+- Product Details
+- Shopping Cart
+- Search Functionality
+
+### Assumptions and Known Issues
+1. Assumptions:
+   - User has a stable internet connection
+   - All products have valid image URLs
+   - Prices are in USD
+
+2. Known Issues:
+   - Image loading might be slow on slower networks
+   - Search functionality is case-sensitive
+   - Limited offline capabilities
+
 # Troubleshooting
 
 If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
