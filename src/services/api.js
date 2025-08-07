@@ -33,8 +33,21 @@ const enhanceProduct = (product) => {
     'cream': 'Rich, nourishing cream that provides intense hydration for dry skin.',
   };
 
+  // Cosmetic product images from Unsplash
+  const cosmeticImages = [
+    'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1583241800698-9c2e8b2b3b8e?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1586495777744-4413f21062fa?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=400&h=400&fit=crop',
+  ];
+
   const productTitle = product.title.toLowerCase();
   let enhancedDescription = product.description;
+  let brand = product.brand || 'Beauty Brand';
   
   // Find matching cosmetic keyword and enhance description
   for (const keyword of Object.keys(cosmeticDescriptions)) {
@@ -44,11 +57,31 @@ const enhanceProduct = (product) => {
     }
   }
 
+  // Assign cosmetic brands based on product type
+  if (productTitle.includes('essence') || productTitle.includes('mascara')) {
+    brand = 'Essence';
+  } else if (productTitle.includes('lipstick') || productTitle.includes('lip')) {
+    brand = 'GlowLips';
+  } else if (productTitle.includes('foundation') || productTitle.includes('concealer')) {
+    brand = 'FlawlessBase';
+  } else if (productTitle.includes('serum') || productTitle.includes('moisturizer')) {
+    brand = 'SkinGlow';
+  } else if (productTitle.includes('perfume') || productTitle.includes('fragrance')) {
+    brand = 'LuxeScent';
+  }
+
+  // Use a cosmetic image based on product ID
+  const imageIndex = product.id % cosmeticImages.length;
+  const cosmeticImage = cosmeticImages[imageIndex];
+
   return {
     ...product,
     description: enhancedDescription,
     category: 'Beauty & Cosmetics',
+    brand: brand,
     rating: Math.max(product.rating || 4.2, 4.0), // Ensure good ratings
+    thumbnail: cosmeticImage,
+    images: [cosmeticImage, ...cosmeticImages.slice(0, 3)],
     reviews: generateMockReviews(product.title),
     highlights: generateProductHighlights(product.title),
   };
@@ -98,7 +131,7 @@ export const fetchProducts = async () => {
     const cosmeticProducts = filterCosmeticProducts(response.data.products);
     
     // If we don't have enough cosmetic products, add some mock ones
-    if (cosmeticProducts.length < 10) {
+    if (cosmeticProducts.length < 15) {
       const mockProducts = [
         {
           id: 9001,
@@ -110,8 +143,6 @@ export const fetchProducts = async () => {
           stock: 50,
           brand: "Essence",
           category: "Beauty & Cosmetics",
-          thumbnail: "https://images.unsplash.com/photo-1586495777744-4413f21062fa?w=400",
-          images: ["https://images.unsplash.com/photo-1586495777744-4413f21062fa?w=400"],
         },
         {
           id: 9002,
@@ -121,10 +152,74 @@ export const fetchProducts = async () => {
           discountPercentage: 20,
           rating: 4.6,
           stock: 30,
+          brand: "GlowLips",
+          category: "Beauty & Cosmetics",
+        },
+        {
+          id: 9003,
+          title: "Hydrating Face Serum",
+          description: "Concentrated serum with hyaluronic acid for intense hydration.",
+          price: 45.00,
+          discountPercentage: 10,
+          rating: 4.7,
+          stock: 25,
+          brand: "SkinGlow",
+          category: "Beauty & Cosmetics",
+        },
+        {
+          id: 9004,
+          title: "Matte Foundation SPF 30",
+          description: "Full coverage foundation with sun protection for all-day wear.",
+          price: 38.99,
+          discountPercentage: 25,
+          rating: 4.5,
+          stock: 40,
+          brand: "FlawlessBase",
+          category: "Beauty & Cosmetics",
+        },
+        {
+          id: 9005,
+          title: "Rose Gold Eyeshadow Palette",
+          description: "12-shade eyeshadow palette with matte and shimmer finishes.",
+          price: 52.00,
+          discountPercentage: 30,
+          rating: 4.9,
+          stock: 20,
           brand: "GlowBeauty",
           category: "Beauty & Cosmetics",
-          thumbnail: "https://images.unsplash.com/photo-1586495777744-4413f21062fa?w=400",
-          images: ["https://images.unsplash.com/photo-1586495777744-4413f21062fa?w=400"],
+        },
+        {
+          id: 9006,
+          title: "Vitamin C Brightening Cream",
+          description: "Anti-aging moisturizer with vitamin C for radiant skin.",
+          price: 41.50,
+          discountPercentage: 12,
+          rating: 4.4,
+          stock: 35,
+          brand: "SkinGlow",
+          category: "Beauty & Cosmetics",
+        },
+        {
+          id: 9007,
+          title: "Waterproof Eyeliner Pen",
+          description: "Precision eyeliner pen with long-lasting, smudge-proof formula.",
+          price: 18.99,
+          discountPercentage: 5,
+          rating: 4.6,
+          stock: 60,
+          brand: "Essence",
+          category: "Beauty & Cosmetics",
+        },
+        {
+          id: 9008,
+          title: "Luxury Perfume Eau de Parfum",
+          description: "Elegant floral fragrance with notes of jasmine and vanilla.",
+          price: 89.99,
+          discountPercentage: 18,
+          rating: 4.8,
+          stock: 15,
+          brand: "LuxeScent",
+          category: "Beauty & Cosmetics",
         }
       ].map(enhanceProduct);
       

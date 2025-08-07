@@ -20,6 +20,7 @@ import Button from '../components/Button';
 const HomeScreen = ({ navigation }) => {
   const [refreshing, setRefreshing] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [likedItems, setLikedItems] = useState({}); // Add this line at the top with other state
 
   const {
     products,
@@ -58,6 +59,14 @@ const HomeScreen = ({ navigation }) => {
     Alert.alert('Success', `${product.title} added to your bag!`);
   };
 
+  const handleHeartPress = (item) => {
+    setLikedItems(prev => ({
+      ...prev,
+      [item.id]: !prev[item.id]
+    }));
+    handleAddToCart(item);
+  };
+
   const renderProductItem = ({ item }) => (
     <TouchableOpacity
       style={styles.productCard}
@@ -72,18 +81,30 @@ const HomeScreen = ({ navigation }) => {
       </View>
 
       <View style={styles.productInfo}>
-        <Text style={styles.productTitle} numberOfLines={1}>
+        <Text style={styles.productBrand} numberOfLines={1}>
+          {item.brand || 'Beauty Brand'}
+        </Text>
+        <Text style={styles.productTitle} numberOfLines={2}>
           {item.title}
         </Text>
+        <View style={styles.ratingContainer}>
+          <Icon name="star" size={12} color="#FFD700" />
+          <Text style={styles.ratingText}>{item.rating?.toFixed(1) || '4.5'}</Text>
+          <Text style={styles.reviewCount}>({item.reviews?.length || '12'})</Text>
+        </View>
         <View style={styles.priceRow}>
           <Text style={styles.productPrice}>
             ${item.price}
           </Text>
           <TouchableOpacity
             style={styles.heartButton}
-            onPress={() => {/* Add to wishlist logic */ }}
+            onPress={() => handleHeartPress(item)}
           >
-            <Icon name="heart-outline" size={16} color="#FF6B9D" />
+            <Icon 
+              name={likedItems[item.id] ? "heart" : "heart-outline"} 
+              size={16} 
+              color={likedItems[item.id] ? "#FF6B9D" : "#8F8F8F"} 
+            />
           </TouchableOpacity>
         </View>
       </View>
@@ -116,7 +137,7 @@ const HomeScreen = ({ navigation }) => {
           <Icon name="search-outline" size={20} color="#999" style={styles.searchIcon} />
           <TextInput
             style={styles.searchInput}
-            placeholder="Search for all products"
+            placeholder="Search beauty products..."
             placeholderTextColor="#999"
             value={searchQuery}
             onChangeText={handleSearch}
@@ -129,8 +150,8 @@ const HomeScreen = ({ navigation }) => {
   const renderSectionHeader = () => (
     <View style={styles.sectionHeader}>
       <View style={styles.sectionTitleContainer}>
-        <Text style={styles.sectionTitle}>Best Products</Text>
-        <Text style={styles.productCount}>{filteredProducts.length || products.length} products</Text>
+        <Text style={styles.sectionTitle}>Beauty Essentials</Text>
+        <Text style={styles.productCount}>{filteredProducts.length || products.length} cosmetic products</Text>
       </View>
       <TouchableOpacity style={styles.filterButton}>
         <Text style={styles.filterText}>Apply Filter</Text>
@@ -358,7 +379,7 @@ const styles = StyleSheet.create({
   productImageContainer: {
     position: 'relative',
     height: 140,
-    backgroundColor: '#E8BBE8',
+    backgroundColor: '#F8F9FA',
     borderTopLeftRadius: 12,
     borderTopRightRadius: 12,
     overflow: 'hidden',
@@ -373,15 +394,50 @@ const styles = StyleSheet.create({
     bottom: 8,
     borderRadius: 8,
   },
-
+  addToCartButton: {
+    position: 'absolute',
+    bottom: 12,
+    right: 12,
+    backgroundColor: '#FF6B9D',
+    borderRadius: 16,
+    width: 32,
+    height: 32,
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 1,
+  },
   productInfo: {
     padding: 12,
+  },
+  productBrand: {
+    fontSize: 12,
+    fontWeight: '500',
+    color: '#999',
+    marginBottom: 2,
+    textTransform: 'uppercase',
   },
   productTitle: {
     fontSize: 14,
     fontWeight: '600',
     color: '#333',
-    marginBottom: 4,
+    marginBottom: 6,
+    lineHeight: 18,
+  },
+  ratingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  ratingText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#333',
+    marginLeft: 4,
+  },
+  reviewCount: {
+    fontSize: 12,
+    color: '#999',
+    marginLeft: 4,
   },
   priceRow: {
     flexDirection: 'row',
@@ -391,10 +447,10 @@ const styles = StyleSheet.create({
   productPrice: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#FF6B9D',
+    color: '#8F8F8F', // Changed to grey
   },
   heartButton: {
-    padding: 4,
+    padding: 8,  // Increased touch target
   },
   bottomNav: {
     flexDirection: 'row',

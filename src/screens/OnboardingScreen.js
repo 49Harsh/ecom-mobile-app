@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#C9A7A2',
   },
   backgroundImage: {
-    flex: 1, // Takes 70% of screen height, stops before Viorra text
+    flex: 1, 
     width: '100%',
   },
   statusBar: {
@@ -62,12 +62,13 @@ const styles = StyleSheet.create({
     // This area will show the background image
   },
   bottomSection: {
-    flex: 0.10, // Takes 30% of screen height for Viorra text and button
+    flex: 0.15, 
     backgroundColor: '#C9A7A2',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingBottom: 60,
+    paddingBottom: 20, 
     paddingHorizontal: 24,
+    marginBottom: 20, 
   },
   time: {
     fontSize: 16,

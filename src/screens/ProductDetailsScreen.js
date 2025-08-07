@@ -262,24 +262,23 @@ const ProductDetailsScreen = ({ navigation, route }) => {
       
       <ScrollView 
         style={styles.scrollView}
-        showsVerticalScrollIndicator={false}>
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 100 }}>
         
         {renderImageGallery()}
         {renderViewSimilar()}
         {renderProductInfo()}
         {renderHighlights()}
         {renderReviews()}
-        
-        <View style={styles.bottomPadding} />
       </ScrollView>
       
-      {/* Bottom Action Bar */}
+      {/* Bottom Action Bar - Fixed Position */}
       <View style={styles.bottomBar}>
-        <Button
-          title="Add to Bag"
-          onPress={handleAddToBag}
+        <TouchableOpacity 
           style={styles.addToBagButton}
-        />
+          onPress={handleAddToBag}>
+          <Text style={styles.addToBagText}>Add to Bag</Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
@@ -288,7 +287,7 @@ const ProductDetailsScreen = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFF0F5',
+    backgroundColor: '#FFFFFF',
   },
   scrollView: {
     flex: 1,
@@ -297,7 +296,7 @@ const styles = StyleSheet.create({
     position: 'relative',
     width: width,
     height: width * 1.2,
-    backgroundColor: '#E8BBE8',
+    backgroundColor: '#F8E8EA', // Pink background like in the image
     borderBottomLeftRadius: 24,
     borderBottomRightRadius: 24,
     overflow: 'hidden',
@@ -336,14 +335,14 @@ const styles = StyleSheet.create({
   },
   viewSimilarButton: {
     borderWidth: 1,
-    borderColor: '#C4B5FD',
+    borderColor: '#B84953',
     borderRadius: 20,
     paddingHorizontal: 16,
     paddingVertical: 8,
   },
   viewSimilarText: {
     fontSize: 14,
-    color: '#7C3AED',
+    color: '#B84953',
     fontWeight: '500',
   },
   shareButton: {
@@ -491,24 +490,46 @@ const styles = StyleSheet.create({
     color: '#333',
     lineHeight: 18,
   },
-  bottomPadding: {
-    height: 100,
-  },
   bottomBar: {
     position: 'absolute',
     bottom: 0,
     left: 0,
     right: 0,
     paddingHorizontal: 20,
-    paddingVertical: 16,
+    paddingVertical: 20,
+    paddingBottom: 30,
     backgroundColor: '#FFFFFF',
     borderTopWidth: 1,
     borderTopColor: '#F0F0F0',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: -2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 5,
   },
   addToBagButton: {
-    backgroundColor: '#B91C7C',
+    backgroundColor: '#B84953',
     borderRadius: 25,
     paddingVertical: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#B84953',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  addToBagText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '700',
+    textAlign: 'center',
   },
   loadingContainer: {
     flex: 1,
