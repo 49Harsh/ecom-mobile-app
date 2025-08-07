@@ -95,20 +95,7 @@ const RegisterScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Status Bar */}
-      <View style={styles.statusBar}>
-        <Text style={styles.time}>9:41</Text>
-        <View style={styles.statusIcons}>
-          <View style={styles.signalBars}>
-            <View style={[styles.bar, { height: 4 }]} />
-            <View style={[styles.bar, { height: 6 }]} />
-            <View style={[styles.bar, { height: 8 }]} />
-            <View style={[styles.bar, { height: 10 }]} />
-          </View>
-          <Icon name="wifi" size={16} color="#FFFFFF" style={styles.icon} />
-          <View style={styles.battery} />
-        </View>
-      </View>
+     
 
       <KeyboardAvoidingView 
         style={styles.keyboardAvoidingView}
@@ -131,7 +118,7 @@ const RegisterScreen = ({ navigation }) => {
               <TextInput
                 style={styles.input}
                 placeholder="Full Name"
-                placeholderTextColor="#B0B0B0"
+                placeholderTextColor="#767676"
                 value={formData.fullName}
                 onChangeText={(value) => handleInputChange('fullName', value)}
                 autoCapitalize="words"
@@ -143,13 +130,13 @@ const RegisterScreen = ({ navigation }) => {
               <TextInput
                 style={styles.input}
                 placeholder="Email Address"
-                placeholderTextColor="#B0B0B0"
+                placeholderTextColor="#767676"
                 value={formData.email}
                 onChangeText={(value) => handleInputChange('email', value)}
                 keyboardType="email-address"
                 autoCapitalize="none"
               />
-              <Icon name="mail-outline" size={20} color="#B0B0B0" style={styles.inputIcon} />
+              <Icon name="mail-outline" size={20} color="#767676" style={styles.inputIcon} />
             </View>
 
             {/* Password Input */}
@@ -157,7 +144,7 @@ const RegisterScreen = ({ navigation }) => {
               <TextInput
                 style={styles.input}
                 placeholder="Password"
-                placeholderTextColor="#B0B0B0"
+                placeholderTextColor="#767676"
                 value={formData.password}
                 onChangeText={(value) => handleInputChange('password', value)}
                 secureTextEntry={!showPassword}
@@ -168,7 +155,7 @@ const RegisterScreen = ({ navigation }) => {
                 <Icon 
                   name={showPassword ? "eye-outline" : "eye-off-outline"} 
                   size={20} 
-                  color="#B0B0B0" 
+                  color="#767676" 
                 />
               </TouchableOpacity>
             </View>
@@ -178,7 +165,7 @@ const RegisterScreen = ({ navigation }) => {
               <TextInput
                 style={styles.input}
                 placeholder="Confirm Password"
-                placeholderTextColor="#B0B0B0"
+                placeholderTextColor="#767676"
                 value={formData.confirmPassword}
                 onChangeText={(value) => handleInputChange('confirmPassword', value)}
                 secureTextEntry={!showConfirmPassword}
@@ -189,7 +176,7 @@ const RegisterScreen = ({ navigation }) => {
                 <Icon 
                   name={showConfirmPassword ? "eye-outline" : "eye-off-outline"} 
                   size={20} 
-                  color="#B0B0B0" 
+                  color="#767676" 
                 />
               </TouchableOpacity>
             </View>
@@ -314,7 +301,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   headerSection: {
-    backgroundColor: '#E8C4C4',
+    backgroundColor: '#F1B0B0',
     paddingHorizontal: 24,
     paddingTop: 40,
     paddingBottom: 60,
@@ -324,7 +311,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 32,
     fontWeight: '700',
-    color: '#8B4B5C',
+    color: '#B84953',
     textAlign: 'center',
   },
   formSection: {
@@ -339,7 +326,7 @@ const styles = StyleSheet.create({
   input: {
     height: 56,
     backgroundColor: '#FFFFFF',
-    borderRadius: 16,
+    borderRadius: 10,
     paddingHorizontal: 20,
     paddingRight: 50,
     fontSize: 16,

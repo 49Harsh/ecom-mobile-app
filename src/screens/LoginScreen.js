@@ -73,20 +73,7 @@ const LoginScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Status Bar */}
-      <View style={styles.statusBar}>
-        <Text style={styles.time}>9:41</Text>
-        <View style={styles.statusIcons}>
-          <View style={styles.signalBars}>
-            <View style={[styles.bar, { height: 4 }]} />
-            <View style={[styles.bar, { height: 6 }]} />
-            <View style={[styles.bar, { height: 8 }]} />
-            <View style={[styles.bar, { height: 10 }]} />
-          </View>
-          <Icon name="wifi" size={16} color="#FFFFFF" style={styles.icon} />
-          <View style={styles.battery} />
-        </View>
-      </View>
+     
 
       <KeyboardAvoidingView 
         style={styles.keyboardAvoidingView}
@@ -112,7 +99,7 @@ const LoginScreen = ({ navigation }) => {
               <TextInput
                 style={styles.input}
                 placeholder="Enter your email Id"
-                placeholderTextColor="#B0B0B0"
+                placeholderTextColor="#B0000"
                 value={formData.email}
                 onChangeText={(value) => handleInputChange('email', value)}
                 keyboardType="email-address"
@@ -213,11 +200,7 @@ const styles = StyleSheet.create({
     paddingBottom: 8,
     backgroundColor: '#E8C4C4',
   },
-  time: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#FFFFFF',
-  },
+
   statusIcons: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -252,7 +235,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   headerSection: {
-    backgroundColor: '#E8C4C4',
+    backgroundColor: '#F1B0B0',
     paddingHorizontal: 24,
     paddingTop: 40,
     paddingBottom: 60,
@@ -262,13 +245,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 32,
     fontWeight: '700',
-    color: '#8B4B5C',
+    color: '#B84953',
     marginBottom: 12,
     textAlign: 'center',
   },
   subtitle: {
     fontSize: 16,
-    color: '#A0A0A0',
+    color: '#AD7373',
     textAlign: 'center',
     lineHeight: 24,
   },
@@ -284,7 +267,7 @@ const styles = StyleSheet.create({
   input: {
     height: 56,
     backgroundColor: '#FFFFFF',
-    borderRadius: 16,
+    borderRadius: 10,
     paddingHorizontal: 20,
     paddingRight: 50,
     fontSize: 16,
