@@ -47,20 +47,6 @@ const ProfileScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Status Bar */}
-      <View style={styles.statusBar}>
-        <Text style={styles.time}>9:41</Text>
-        <View style={styles.statusIcons}>
-          <View style={styles.signalBars}>
-            <View style={[styles.bar, { height: 4 }]} />
-            <View style={[styles.bar, { height: 6 }]} />
-            <View style={[styles.bar, { height: 8 }]} />
-            <View style={[styles.bar, { height: 10 }]} />
-          </View>
-          <Icon name="wifi" size={16} color="#000" style={styles.icon} />
-          <View style={styles.battery} />
-        </View>
-      </View>
 
       {/* Header */}
       <View style={styles.header}>
