@@ -96,11 +96,15 @@ You can watch a demonstration of the app's functionality here:
 [View Demo Video](https://drive.google.com/file/d/1JjvydZWYRJlwwYOCBPUALbu8Mjc6MQb8/view?usp=drive_link)
 
 ### Screenshots/GIFs
-> Note: Please add actual screenshots of your app here. Below are the suggested screenshots to include:
-- Home Screen
-- Product Details
-- Shopping Cart
-- Search Functionality
+Here are the screenshots from the application:
+
+![Demo Image 1](src/assets/demo-img/1.png)
+![Demo Image 2](src/assets/demo-img/2.png)
+![Demo Image 3](src/assets/demo-img/3.png)
+![Demo Image 4](src/assets/demo-img/4.png)
+![Demo Image 5](src/assets/demo-img/5.png)
+![Demo Image 6](src/assets/demo-img/6.png)
+![Demo Image 7](src/assets/demo-img/7.png)
 
 ### Assumptions and Known Issues
 1. Assumptions:
