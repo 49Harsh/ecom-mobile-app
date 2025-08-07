@@ -9,9 +9,9 @@ import {
   TouchableOpacity,
   Dimensions,
   Alert,
+  StatusBar,
 } from 'react-native';
 import Icon from '@react-native-vector-icons/ionicons';
-// import LinearGradient from 'react-native-linear-gradient';
 import { useProducts } from '../context/ProductContext';
 import Button from '../components/Button';
 
@@ -63,49 +63,42 @@ const ProductDetailsScreen = ({ navigation, route }) => {
           resizeMode="cover"
         />
         
-        {/* Image Navigation */}
-        {images.length > 1 && (
-          <View style={styles.imageNavigation}>
-            {images.map((_, index) => (
-              <TouchableOpacity
-                key={index}
-                style={[
-                  styles.imageDot,
-                  selectedImageIndex === index && styles.activeImageDot
-                ]}
-                onPress={() => setSelectedImageIndex(index)}
-              />
-            ))}
-          </View>
-        )}
-        
         {/* Action Buttons */}
         <View style={styles.imageActions}>
           <TouchableOpacity 
             style={styles.actionButton}
             onPress={() => navigation.goBack()}>
-            <Icon name="arrow-back" size={20} color="#2D3748" />
+            <Icon name="arrow-back" size={20} color="#333" />
           </TouchableOpacity>
           
           <TouchableOpacity 
             style={styles.actionButton}
-            onPress={() => setIsFavorite(!isFavorite)}>
-            <Icon 
-              name={isFavorite ? "heart" : "heart-outline"} 
-              size={20} 
-              color={isFavorite ? "#FF6B9D" : "#2D3748"} 
-            />
+            onPress={() => {/* Share functionality */}}>
+            <Icon name="share-outline" size={20} color="#333" />
           </TouchableOpacity>
         </View>
       </View>
     );
   };
 
+  const renderViewSimilar = () => (
+    <View style={styles.viewSimilarContainer}>
+      <TouchableOpacity style={styles.viewSimilarButton}>
+        <Text style={styles.viewSimilarText}>View Similar</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.shareButton}>
+        <Icon name="share-outline" size={20} color="#666" />
+      </TouchableOpacity>
+    </View>
+  );
+
   const renderProductInfo = () => (
     <View style={styles.productInfo}>
-      {/* Brand and Title */}
-      <Text style={styles.brand}>{currentProduct?.brand || 'GlowBeauty'}</Text>
+      {/* Title */}
       <Text style={styles.title}>{currentProduct?.title}</Text>
+      
+      {/* Description */}
+      <Text style={styles.description}>{currentProduct?.description}</Text>
       
       {/* Rating */}
       <View style={styles.ratingContainer}>
@@ -113,15 +106,21 @@ const ProductDetailsScreen = ({ navigation, route }) => {
           {[1, 2, 3, 4, 5].map((star) => (
             <Icon
               key={star}
-              name={star <= Math.floor(currentProduct?.rating || 4.5) ? "star" : "star-outline"}
+              name={star <= Math.floor(currentProduct?.rating || 2.5) ? "star" : "star-outline"}
               size={16}
               color="#FFD700"
             />
           ))}
         </View>
         <Text style={styles.ratingText}>
-          {currentProduct?.rating?.toFixed(1) || '4.5'} (247 reviews)
+          {currentProduct?.rating?.toFixed(1) || '2.56'}/5
         </Text>
+      </View>
+      
+      {/* Sold by */}
+      <View style={styles.soldByContainer}>
+        <Text style={styles.soldByLabel}>Sold by :</Text>
+        <Text style={styles.soldByValue}>{currentProduct?.brand || 'Essence'}</Text>
       </View>
       
       {/* Price */}
@@ -133,94 +132,103 @@ const ProductDetailsScreen = ({ navigation, route }) => {
           }
         </Text>
         {currentProduct?.discountPercentage > 0 && (
-          <>
-            <Text style={styles.originalPrice}>${currentProduct.price}</Text>
-            <View style={styles.discountBadge}>
-              <Text style={styles.discountText}>
-                -{Math.round(currentProduct.discountPercentage)}%
-              </Text>
-            </View>
-          </>
+          <Text style={styles.originalPrice}>${currentProduct.price}</Text>
         )}
-      </View>
-      
-      {/* Description */}
-      <Text style={styles.description}>{currentProduct?.description}</Text>
-      
-      {/* Quantity Selector */}
-      <View style={styles.quantityContainer}>
-        <Text style={styles.quantityLabel}>Quantity</Text>
-        <View style={styles.quantitySelector}>
-          <TouchableOpacity 
-            style={styles.quantityButton}
-            onPress={() => setQuantity(Math.max(1, quantity - 1))}>
-            <Icon name="remove" size={16} color="#2D3748" />
-          </TouchableOpacity>
-          <Text style={styles.quantityText}>{quantity}</Text>
-          <TouchableOpacity 
-            style={styles.quantityButton}
-            onPress={() => setQuantity(quantity + 1)}>
-            <Icon name="add" size={16} color="#2D3748" />
-          </TouchableOpacity>
-        </View>
       </View>
     </View>
   );
 
   const renderHighlights = () => (
     <View style={styles.highlightsSection}>
-      <Text style={styles.sectionTitle}>Product Highlights</Text>
-      {currentProduct?.highlights?.map((highlight, index) => (
-        <View key={index} style={styles.highlightItem}>
-          <Icon name="checkmark-circle" size={16} color="#4ECDC4" />
-          <Text style={styles.highlightText}>{highlight}</Text>
+      <Text style={styles.sectionTitle}>Highlights</Text>
+      
+      <View style={styles.highlightsGrid}>
+        <View style={styles.highlightColumn}>
+          <View style={styles.highlightItem}>
+            <Text style={styles.highlightLabel}>Width</Text>
+            <Text style={styles.highlightValue}>15.14</Text>
+          </View>
+          
+          <View style={styles.highlightItem}>
+            <Text style={styles.highlightLabel}>Warranty</Text>
+            <Text style={styles.highlightValue}>1 week</Text>
+          </View>
         </View>
-      ))}
+        
+        <View style={styles.highlightColumn}>
+          <View style={styles.highlightItem}>
+            <Text style={styles.highlightLabel}>Height</Text>
+            <Text style={styles.highlightValue}>13.08</Text>
+          </View>
+          
+          <View style={styles.highlightItem}>
+            <Text style={styles.highlightLabel}>Shipping</Text>
+            <Text style={styles.highlightValue}>In 3-5 business days</Text>
+          </View>
+        </View>
+      </View>
     </View>
   );
 
   const renderReviews = () => (
     <View style={styles.reviewsSection}>
-      <View style={styles.reviewsHeader}>
-        <Text style={styles.sectionTitle}>Reviews</Text>
-        <TouchableOpacity>
-          <Text style={styles.seeAllText}>See All</Text>
-        </TouchableOpacity>
-      </View>
+      <Text style={styles.sectionTitle}>Ratings & Reviews</Text>
       
-      {currentProduct?.reviews?.slice(0, 2).map((review, index) => (
-        <View key={index} style={styles.reviewItem}>
-          <View style={styles.reviewHeader}>
-            <View style={styles.reviewerInfo}>
-              <View style={styles.reviewerAvatar}>
-                <Text style={styles.reviewerInitial}>
-                  {review.reviewer.charAt(0)}
-                </Text>
-              </View>
-              <View>
-                <Text style={styles.reviewerName}>{review.reviewer}</Text>
-                <View style={styles.reviewStars}>
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <Icon
-                      key={star}
-                      name={star <= review.rating ? "star" : "star-outline"}
-                      size={12}
-                      color="#FFD700"
-                    />
-                  ))}
-                </View>
-              </View>
-            </View>
+      {/* Review Items */}
+      <View style={styles.reviewItem}>
+        <View style={styles.reviewHeader}>
+          <Image 
+            source={{ uri: 'https://images.unsplash.com/photo-1494790108755-2616c96c6f8c?w=40&h=40&fit=crop&crop=face' }}
+            style={styles.reviewerAvatar}
+          />
+          <View style={styles.reviewerInfo}>
+            <Text style={styles.reviewerName}>Eleanor Collins</Text>
+            <Text style={styles.reviewerEmail}>eleanor.collins@gmail.com</Text>
           </View>
-          <Text style={styles.reviewComment}>{review.comment}</Text>
+          <View style={styles.reviewStars}>
+            {[1, 2, 3, 4, 5].map((star) => (
+              <Icon
+                key={star}
+                name={star <= 3 ? "star" : "star-outline"}
+                size={14}
+                color="#FFD700"
+              />
+            ))}
+          </View>
         </View>
-      ))}
+        <Text style={styles.reviewComment}>Would not recommend...</Text>
+      </View>
+
+      <View style={styles.reviewItem}>
+        <View style={styles.reviewHeader}>
+          <Image 
+            source={{ uri: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=40&h=40&fit=crop&crop=face' }}
+            style={styles.reviewerAvatar}
+          />
+          <View style={styles.reviewerInfo}>
+            <Text style={styles.reviewerName}>Lucas Gordon</Text>
+            <Text style={styles.reviewerEmail}>lucas.gordon@gmail.com</Text>
+          </View>
+          <View style={styles.reviewStars}>
+            {[1, 2, 3, 4, 5].map((star) => (
+              <Icon
+                key={star}
+                name={star <= 3 ? "star" : "star-outline"}
+                size={14}
+                color="#FFD700"
+              />
+            ))}
+          </View>
+        </View>
+        <Text style={styles.reviewComment}>Very satisfied!</Text>
+      </View>
     </View>
   );
 
   if (loading) {
     return (
       <SafeAreaView style={styles.container}>
+        <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
         <View style={styles.loadingContainer}>
           <Text>Loading product details...</Text>
         </View>
@@ -231,6 +239,7 @@ const ProductDetailsScreen = ({ navigation, route }) => {
   if (error || !currentProduct) {
     return (
       <SafeAreaView style={styles.container}>
+        <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
         <View style={styles.errorContainer}>
           <Icon name="alert-circle-outline" size={64} color="#E53E3E" />
           <Text style={styles.errorTitle}>Product Not Found</Text>
@@ -249,11 +258,14 @@ const ProductDetailsScreen = ({ navigation, route }) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
+      
       <ScrollView 
         style={styles.scrollView}
         showsVerticalScrollIndicator={false}>
         
         {renderImageGallery()}
+        {renderViewSimilar()}
         {renderProductInfo()}
         {renderHighlights()}
         {renderReviews()}
@@ -263,14 +275,9 @@ const ProductDetailsScreen = ({ navigation, route }) => {
       
       {/* Bottom Action Bar */}
       <View style={styles.bottomBar}>
-        <TouchableOpacity style={styles.shareButton}>
-          <Icon name="share-outline" size={20} color="#2D3748" />
-        </TouchableOpacity>
-        
         <Button
           title="Add to Bag"
           onPress={handleAddToBag}
-          icon="bag-add-outline"
           style={styles.addToBagButton}
         />
       </View>
@@ -281,7 +288,7 @@ const ProductDetailsScreen = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FFF0F5',
   },
   scrollView: {
     flex: 1,
@@ -289,37 +296,21 @@ const styles = StyleSheet.create({
   imageGallery: {
     position: 'relative',
     width: width,
-    height: width,
-    backgroundColor: '#F7FAFC',
+    height: width * 1.2,
+    backgroundColor: '#E8BBE8',
+    borderBottomLeftRadius: 24,
+    borderBottomRightRadius: 24,
+    overflow: 'hidden',
   },
   mainImage: {
     width: '100%',
     height: '100%',
   },
-  imageNavigation: {
-    position: 'absolute',
-    bottom: 16,
-    left: 0,
-    right: 0,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  imageDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: 'rgba(255, 255, 255, 0.5)',
-    marginHorizontal: 4,
-  },
-  activeImageDot: {
-    backgroundColor: '#FFFFFF',
-  },
   imageActions: {
     position: 'absolute',
-    top: 16,
-    left: 16,
-    right: 16,
+    top: 20,
+    left: 20,
+    right: 20,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
@@ -336,28 +327,48 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 2,
   },
-  productInfo: {
-    padding: 20,
+  viewSimilarContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 16,
   },
-  brand: {
+  viewSimilarButton: {
+    borderWidth: 1,
+    borderColor: '#C4B5FD',
+    borderRadius: 20,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+  },
+  viewSimilarText: {
     fontSize: 14,
-    color: '#9CA3AF',
-    fontWeight: '600',
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
+    color: '#7C3AED',
+    fontWeight: '500',
+  },
+  shareButton: {
+    padding: 8,
+  },
+  productInfo: {
+    paddingHorizontal: 20,
+    paddingBottom: 24,
   },
   title: {
-    fontSize: 24,
-    fontWeight: '800',
-    color: '#2D3748',
-    marginTop: 4,
-    marginBottom: 12,
-    lineHeight: 32,
+    fontSize: 22,
+    fontWeight: '700',
+    color: '#333',
+    marginBottom: 8,
+  },
+  description: {
+    fontSize: 14,
+    color: '#666',
+    lineHeight: 20,
+    marginBottom: 16,
   },
   ratingContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 16,
+    marginBottom: 12,
   },
   stars: {
     flexDirection: 'row',
@@ -365,8 +376,23 @@ const styles = StyleSheet.create({
   },
   ratingText: {
     fontSize: 14,
-    color: '#2D3748',
-    fontWeight: '500',
+    color: '#333',
+    fontWeight: '600',
+  },
+  soldByContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  soldByLabel: {
+    fontSize: 14,
+    color: '#666',
+    marginRight: 8,
+  },
+  soldByValue: {
+    fontSize: 14,
+    color: '#333',
+    fontWeight: '600',
   },
   priceContainer: {
     flexDirection: 'row',
@@ -376,61 +402,13 @@ const styles = StyleSheet.create({
   currentPrice: {
     fontSize: 28,
     fontWeight: '800',
-    color: '#FF6B9D',
+    color: '#333',
   },
   originalPrice: {
     fontSize: 18,
-    color: '#9CA3AF',
+    color: '#999',
     textDecorationLine: 'line-through',
     marginLeft: 12,
-  },
-  discountBadge: {
-    backgroundColor: '#E53E3E',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 4,
-    marginLeft: 12,
-  },
-  discountText: {
-    color: '#FFFFFF',
-    fontSize: 12,
-    fontWeight: '600',
-  },
-  description: {
-    fontSize: 16,
-    color: '#2D3748',
-    lineHeight: 24,
-    marginBottom: 24,
-  },
-  quantityContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: 24,
-  },
-  quantityLabel: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#2D3748',
-  },
-  quantitySelector: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#E5E5E5',
-    borderRadius: 8,
-  },
-  quantityButton: {
-    width: 40,
-    height: 40,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  quantityText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#2D3748',
-    paddingHorizontal: 16,
   },
   highlightsSection: {
     paddingHorizontal: 20,
@@ -439,75 +417,79 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#2D3748',
+    color: '#333',
     marginBottom: 16,
   },
-  highlightItem: {
+  highlightsGrid: {
     flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 12,
+    justifyContent: 'space-between',
   },
-  highlightText: {
-    fontSize: 14,
-    color: '#2D3748',
-    marginLeft: 12,
+  highlightColumn: {
     flex: 1,
+    marginRight: 20,
+  },
+  highlightItem: {
+    marginBottom: 20,
+  },
+  highlightLabel: {
+    fontSize: 14,
+    color: '#666',
+    marginBottom: 4,
+  },
+  highlightValue: {
+    fontSize: 16,
+    color: '#333',
+    fontWeight: '600',
   },
   reviewsSection: {
     paddingHorizontal: 20,
     paddingBottom: 24,
   },
-  reviewsHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  seeAllText: {
-    fontSize: 14,
-    color: '#FF6B9D',
-    fontWeight: '600',
-  },
   reviewItem: {
-    backgroundColor: '#F7FAFC',
+    backgroundColor: '#FFFFFF',
     padding: 16,
     borderRadius: 12,
     marginBottom: 12,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
   },
   reviewHeader: {
-    marginBottom: 8,
-  },
-  reviewerInfo: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginBottom: 8,
   },
   reviewerAvatar: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: '#FF6B9D',
-    justifyContent: 'center',
-    alignItems: 'center',
+    width: 36,
+    height: 36,
+    borderRadius: 18,
     marginRight: 12,
   },
-  reviewerInitial: {
-    color: '#FFFFFF',
-    fontSize: 14,
-    fontWeight: '600',
+  reviewerInfo: {
+    flex: 1,
   },
   reviewerName: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#2D3748',
+    color: '#333',
     marginBottom: 2,
+  },
+  reviewerEmail: {
+    fontSize: 12,
+    color: '#666',
   },
   reviewStars: {
     flexDirection: 'row',
   },
   reviewComment: {
     fontSize: 14,
-    color: '#2D3748',
-    lineHeight: 20,
+    color: '#333',
+    lineHeight: 18,
   },
   bottomPadding: {
     height: 100,
@@ -517,26 +499,16 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    flexDirection: 'row',
-    alignItems: 'center',
     paddingHorizontal: 20,
     paddingVertical: 16,
     backgroundColor: '#FFFFFF',
     borderTopWidth: 1,
-    borderTopColor: '#E5E5E5',
-  },
-  shareButton: {
-    width: 48,
-    height: 48,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#E5E5E5',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 16,
+    borderTopColor: '#F0F0F0',
   },
   addToBagButton: {
-    flex: 1,
+    backgroundColor: '#B91C7C',
+    borderRadius: 25,
+    paddingVertical: 16,
   },
   loadingContainer: {
     flex: 1,
@@ -552,13 +524,13 @@ const styles = StyleSheet.create({
   errorTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#2D3748',
+    color: '#333',
     marginTop: 16,
     marginBottom: 8,
   },
   errorText: {
     fontSize: 16,
-    color: '#9CA3AF',
+    color: '#666',
     textAlign: 'center',
     lineHeight: 22,
     marginBottom: 24,

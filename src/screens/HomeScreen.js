@@ -9,15 +9,12 @@ import {
   Alert,
   TouchableOpacity,
   Image,
-  ScrollView,
   StatusBar,
   TextInput,
+  ImageBackground,
 } from 'react-native';
 import Icon from '@react-native-vector-icons/ionicons';
 import { useProducts } from '../context/ProductContext';
-import { useAuth } from '../context/AuthContext';
-import ProductCard from '../components/ProductCard';
-import Input from '../components/Input';
 import Button from '../components/Button';
 
 const HomeScreen = ({ navigation }) => {
@@ -35,7 +32,7 @@ const HomeScreen = ({ navigation }) => {
     getCartItemsCount
   } = useProducts();
 
-  const { user } = useAuth();
+
 
   useEffect(() => {
     getProducts();
@@ -61,32 +58,34 @@ const HomeScreen = ({ navigation }) => {
     Alert.alert('Success', `${product.title} added to your bag!`);
   };
 
-  const renderProductItem = ({ item, index }) => (
-    <TouchableOpacity 
+  const renderProductItem = ({ item }) => (
+    <TouchableOpacity
       style={styles.productCard}
       onPress={() => handleProductPress(item)}
     >
       <View style={styles.productImageContainer}>
-        <Image 
-          source={{ uri: item.image || item.thumbnail }} 
+        <Image
+          source={{ uri: item.thumbnail }}
           style={styles.productImage}
           resizeMode="cover"
         />
-        <TouchableOpacity 
-          style={styles.wishlistButton}
-          onPress={() => {/* Add to wishlist logic */}}
-        >
-          <Icon name="heart-outline" size={16} color="#666" />
-        </TouchableOpacity>
       </View>
-      
+
       <View style={styles.productInfo}>
         <Text style={styles.productTitle} numberOfLines={1}>
           {item.title}
         </Text>
-        <Text style={styles.productPrice}>
-          ${item.price}
-        </Text>
+        <View style={styles.priceRow}>
+          <Text style={styles.productPrice}>
+            ${item.price}
+          </Text>
+          <TouchableOpacity
+            style={styles.heartButton}
+            onPress={() => {/* Add to wishlist logic */ }}
+          >
+            <Icon name="heart-outline" size={16} color="#FF6B9D" />
+          </TouchableOpacity>
+        </View>
       </View>
     </TouchableOpacity>
   );
@@ -140,29 +139,7 @@ const HomeScreen = ({ navigation }) => {
     </View>
   );
 
-  const renderBottomNav = () => (
-    <View style={styles.bottomNav}>
-      <TouchableOpacity style={styles.navItem}>
-        <Icon name="home" size={24} color="#FF6B9D" />
-        <Text style={[styles.navText, styles.activeNavText]}>Home</Text>
-      </TouchableOpacity>
-      
-      <TouchableOpacity style={styles.navItem}>
-        <Icon name="pricetag-outline" size={24} color="#999" />
-        <Text style={styles.navText}>Offers</Text>
-      </TouchableOpacity>
-      
-      <TouchableOpacity style={styles.navItem}>
-        <Icon name="heart-outline" size={24} color="#999" />
-        <Text style={styles.navText}>Wishlist</Text>
-      </TouchableOpacity>
-      
-      <TouchableOpacity style={styles.navItem}>
-        <Icon name="person-outline" size={24} color="#999" />
-        <Text style={styles.navText}>Profile</Text>
-      </TouchableOpacity>
-    </View>
-  );
+
 
   const renderEmptyState = () => (
     <View style={styles.emptyState}>
@@ -204,33 +181,37 @@ const HomeScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
-      
-      {renderHeader()}
-      
-      <View style={styles.contentContainer}>
-        {renderSectionHeader()}
-        
-        <FlatList
-          data={filteredProducts.length > 0 ? filteredProducts : products}
-          renderItem={renderProductItem}
-          keyExtractor={(item) => item.id.toString()}
-          numColumns={2}
-          contentContainerStyle={styles.productList}
-          columnWrapperStyle={styles.productRow}
-          ListEmptyComponent={!loading ? renderEmptyState : null}
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={handleRefresh}
-              colors={['#FF6B9D']}
-              tintColor="#FF6B9D"
-            />
-          }
-          showsVerticalScrollIndicator={false}
-        />
-      </View>
 
-      {renderBottomNav()}
+      <ImageBackground
+        source={require('../assets/bg.png')}
+        style={styles.backgroundImage}
+        resizeMode="cover"
+      >
+        {renderHeader()}
+
+        <View style={styles.contentContainer}>
+          {renderSectionHeader()}
+
+          <FlatList
+            data={filteredProducts.length > 0 ? filteredProducts : products}
+            renderItem={renderProductItem}
+            keyExtractor={(item) => item.id.toString()}
+            numColumns={2}
+            contentContainerStyle={styles.productList}
+            columnWrapperStyle={styles.productRow}
+            ListEmptyComponent={!loading ? renderEmptyState : null}
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={handleRefresh}
+                colors={['#FF6B9D']}
+                tintColor="#FF6B9D"
+              />
+            }
+            showsVerticalScrollIndicator={false}
+          />
+        </View>
+      </ImageBackground>
     </SafeAreaView>
   );
 };
@@ -239,6 +220,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
+  },
+  backgroundImage: {
+    flex: 1,
+    width: '100%',
   },
   header: {
     paddingHorizontal: 16,
@@ -250,6 +235,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 16,
+    marginTop: 40
   },
   brandName: {
     fontSize: 24,
@@ -286,11 +272,15 @@ const styles = StyleSheet.create({
   },
   searchWrapper: {
     flexDirection: 'row',
+    marginLeft: 12,
+    marginRight: 12,
     alignItems: 'center',
     backgroundColor: '#F8F9FA',
-    borderRadius: 25,
+    borderRadius: 20,           // Rounded corner 16 किया गया
     paddingHorizontal: 16,
     height: 44,
+    borderWidth: 1,             // Border search wrapper पर move किया
+    borderColor: '#8F8F8F',     // Border color
   },
   searchIcon: {
     marginRight: 8,
@@ -300,10 +290,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#333',
     height: '100%',
+    paddingHorizontal: 10
   },
+
+
   contentContainer: {
     flex: 1,
-    backgroundColor: '#FFF0F5',
+    backgroundColor: '#FFEDE8',
   },
   sectionHeader: {
     flexDirection: 'row',
@@ -311,7 +304,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     paddingHorizontal: 16,
     paddingVertical: 16,
-    backgroundColor: '#FFF0F5',
+    backgroundColor: '#FFEDE8',
   },
   sectionTitleContainer: {
     flex: 1,
@@ -365,33 +358,22 @@ const styles = StyleSheet.create({
   productImageContainer: {
     position: 'relative',
     height: 140,
+    backgroundColor: '#E8BBE8',
     borderTopLeftRadius: 12,
     borderTopRightRadius: 12,
     overflow: 'hidden',
+    margin: 8,
+    marginBottom: 0,
   },
   productImage: {
-    width: '100%',
-    height: '100%',
-  },
-  wishlistButton: {
     position: 'absolute',
     top: 8,
+    left: 8,
     right: 8,
-    width: 28,
-    height: 28,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 14,
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 2,
+    bottom: 8,
+    borderRadius: 8,
   },
+
   productInfo: {
     padding: 12,
   },
@@ -401,10 +383,18 @@ const styles = StyleSheet.create({
     color: '#333',
     marginBottom: 4,
   },
+  priceRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
   productPrice: {
     fontSize: 16,
     fontWeight: '700',
     color: '#FF6B9D',
+  },
+  heartButton: {
+    padding: 4,
   },
   bottomNav: {
     flexDirection: 'row',
